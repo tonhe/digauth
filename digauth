@@ -1,0 +1,44 @@
+#!/bin/bash
+VERSION=0.0.1
+#
+#
+# digauth
+# Created by Tony Mattke on 8/27/13
+# Copyright 2013 Tony Mattke. All rights reserved.
+# http://routerjockey.com tony@mattke.net http://twitter.com/tonhe
+#
+# Git Repo
+# https://github.com/tonhe/digauth.git
+#
+#
+#
+######################################################### variables
+DEBUG=1   # Displays Debug Information
+
+#################### External Programs
+DIG=/usr/bin/dig
+
+#################### working directory
+TMPDIR=~/.digauth
+AUTH=$TMPDIR/auth-servers
+RESULTS=$TMPDIR/results
+
+
+######################################################### init
+mkdir $TMPDIR 2>/dev/null
+rm $TMPDIR/* 2>/dev/null
+
+######################################################### functions
+
+function dprint {
+  if [ $DEBUG -eq 1 ]; then
+    echo \(d\) ${1}
+   fi
+}
+
+
+HOST=${1}
+dprint "host=$HOST"
+
+$DIG $HOST +noall +auth 
+
