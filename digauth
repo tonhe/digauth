@@ -40,5 +40,20 @@ function dprint {
 HOST=${1}
 dprint "host=$HOST"
 
-$DIG $HOST +noall +auth 
+$DIG $HOST +noall +auth | grep NS | awk '{print $5}' > $AUTH
+
+dprint "`wc -l $AUTH` auth servers found"
+
+for SERVER in `cat $AUTH`; do
+	ANSWER=""
+	ANSWER=`$DIG @$SERVER $HOST +short`
+	dprint "$DIG @$SERVER $HOST +short ($ANSWER)"
+	echo $ANSWER >> $RESULTS
+done
+
+dprint `cat $RESULTS`
+
+sort -u $RESULTS 
+
+
 
